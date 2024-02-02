@@ -38,6 +38,7 @@ export default function Signup() {
       }
       // set loading to false
       setLoading(false);
+      //redirect to sign-in page if the sign up is successful
       if (res.ok) {
         navigate("/sign-in");
       }
