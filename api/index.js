@@ -3,11 +3,11 @@ import mongoose from "mongoose";
 import dotenv from "dotenv";
 import userRoutes from "./routes/user.route.js";
 import authRoutes from "./routes/auth.route.js";
-import bodyParser from "body-parser";
+// import bodyParser from "body-parser";
 
 const app = express();
-// app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 dotenv.config();
 mongoose
   .connect(process.env.MONGO)
