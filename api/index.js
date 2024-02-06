@@ -22,7 +22,7 @@ app.listen(3000, () => {
   console.log("Server is running in port 3000");
 });
 
-app.use("/api/use", userRoutes);
+app.use("/api/user", userRoutes);
 app.use("/api/auth", authRoutes);
 
 // middleware used for error messages
