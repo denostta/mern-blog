@@ -43,7 +43,7 @@ export default function Signup() {
         navigate("/sign-in");
       }
     } catch (error) {
-      errorMessage(error.message);
+      setErrorMessage(error.message);
       setLoading(false);
     }
   };
