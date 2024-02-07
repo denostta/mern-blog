@@ -1,16 +1,21 @@
 import { Alert, Button, Label, Spinner, TextInput } from "flowbite-react";
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  signInStart,
+  signInSuccess,
+  signInFailure,
+} from "../redux/user/userSlice";
 
 export default function SignIn() {
   const [formData, setFormData] = useState({});
-  // for error handling
-  const [errorMessage, setErrorMessage] = useState(null);
-  // for slow internet connection
-  const [loading, setLoading] = useState(false);
+  const { loading, error: errorMessage } = useSelector((state) => state.user);
+  //initialize dispatch
+  const dispatch = useDispatch();
   // initialize navigate
   const navigate = useNavigate();
-  // for handling event with input data on fields
+  // for handling event with input data on fields. trim() is used to remove white spaces.
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.id]: e.target.value.trim() });
   };
@@ -20,12 +25,11 @@ export default function SignIn() {
     e.preventDefault();
     // for incomplete input data error
     if (!formData.email || !formData.password) {
-      return setErrorMessage("Please fill out all fields");
+      return dispatch(signInFailure("Please fill all the fields"));
     }
     // to post data from the form to database thru the server
     try {
-      setLoading(true);
-      setErrorMessage(null);
+      dispatch(signInStart());
       const res = await fetch("/api/auth/signin", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -34,17 +38,15 @@ export default function SignIn() {
       const data = await res.json();
       // for inputdata already exist error
       if (data.success === false) {
-        return setErrorMessage(data.message);
+        dispatch(signInFailure(data.message));
       }
-      // set loading to false
-      setLoading(false);
       //redirect to home page if the sign up is successful
       if (res.ok) {
+        dispatch(signInSuccess(data));
         navigate("/");
       }
     } catch (error) {
-      setErrorMessage(error.message);
-      setLoading(false);
+      dispatch(signInFailure(data.message));
     }
   };
   return (
